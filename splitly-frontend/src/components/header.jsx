@@ -2,7 +2,7 @@ import React from "react";
 import { IconChevronDown } from "@tabler/icons-react";
 import { Burger, Center, Container, Group, Menu } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import "./header.css";
+import "../styles/components/header.css";
 
 // Example navigation links
 const links = [
@@ -77,7 +77,7 @@ export default function Header() {
 
   return (
     <header className="header">
-      <Container size="md">
+      <Container size="xl">
         <div className="inner">
           <h1>Splitly</h1>
           <Group gap={5} visibleFrom="sm">
