@@ -1,20 +1,13 @@
 .hero-inner {
   display: flex;
   justify-content: space-between;
-  padding-top: calc(var(--mantine-spacing-xl) * 4);
-  padding-bottom: calc(var(--mantine-spacing-xl) * 4);
+  padding-top: calc(var(--mantine-spacing-xl) * 3);
+  padding-bottom: calc(var(--mantine-spacing-xl) * 2);
 }
 
 .hero-content {
   max-width: 480px;
   margin-right: calc(var(--mantine-spacing-xl) * 3);
-}
-
-@media (max-width: 768px) {
-  .hero-content {
-    max-width: 100%;
-    margin-right: 0;
-  }
 }
 
 .hero-title {
@@ -25,31 +18,13 @@
   font-weight: 900;
 }
 
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 28px;
-  }
-}
-
-.hero-control {
+/* .hero-control {
   flex: 1;
-}
-
-@media (min-width: 480px) {
-  .hero-control {
-    flex: initial;
-  }
-}
+} */
 
 .hero-image {
   width: 50%;
   height: auto;
-}
-
-@media (max-width: 768px) {
-  .hero-image {
-    display: none;
-  }
 }
 
 .hero-highlight {
@@ -57,4 +32,77 @@
   background-color: var(--mantine-color-blue-light);
   border-radius: var(--mantine-radius-sm);
   padding: 4px 12px;
+}
+
+@media (max-width: 768px) {
+  .hero-inner {
+    padding-top: calc(var(--mantine-spacing-xl) * 1);
+    padding-bottom: calc(var(--mantine-spacing-xl) * 1);
+  }
+
+  .hero-content {
+    margin-top: 15px;
+  }
+
+  .hero-image {
+    width: 80%;
+    height: auto;
+  }
+
+  .hero-inner {
+    flex-direction: column-reverse;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .p-0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .hero-title {
+    font-size: 28px;
+  }
+
+  .hero-control {
+    flex: initial;
+  }
+}
+
+/* feature section */
+
+.wrapper {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.title {
+  color: var(--mantine-color-black);
+  font-family: Greycliff CF, var(--mantine-font-family);
+  font-size: 44px;
+  line-height: 1.2;
+  font-weight: 900;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 767px) {
+  .text-center {
+    text-align: center;
+  }
 }

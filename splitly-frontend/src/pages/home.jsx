@@ -1,10 +1,14 @@
-import { IconCheck } from "@tabler/icons-react";
+import { IconLock } from "@tabler/icons-react";
+import { FaUserGroup } from "react-icons/fa6";
+import { IoCalculator } from "react-icons/io5";
+import { CiChat1 } from "react-icons/ci";
+
 import {
   Button,
   Container,
   Group,
   Image,
-  List,
+  SimpleGrid,
   Text,
   ThemeIcon,
   Title,
@@ -13,62 +17,87 @@ import image from "../assets/hero-img.jpg";
 import MainLayout from "../layouts/mainLayout";
 import "../styles/pages/home.css";
 
+export const MOCKDATA = [
+  {
+    icon: IoCalculator,
+    title: "Smart Calculations",
+    description:
+      "Automatically calculate who owes what with smart expense splitting",
+  },
+  {
+    icon: FaUserGroup,
+    title: "Group Management",
+    description: "Create groups for trips, roommates, or any shared expenses",
+  },
+  {
+    icon: CiChat1,
+    title: "Group Chat",
+    description: "Discuss expenses and plans with built-in group chat",
+  },
+  {
+    icon: IconLock,
+    title: "Secure & Private",
+    description: "Your financial data is encrypted and secure",
+  },
+];
+
+function Feature({ icon: Icon, title, description }) {
+  return (
+    <div>
+      <ThemeIcon variant="light" size={40} radius={40}>
+        <Icon size={38} stroke={1.5} />
+      </ThemeIcon>
+      <Text mt="sm" mb={7} fw={500} size="xl">
+        {title}
+      </Text>
+      <Text lh={1.6}>{description}</Text>
+    </div>
+  );
+}
+
 export default function Home() {
+  const features = MOCKDATA.map((feature, index) => (
+    <Feature {...feature} key={index} />
+  ));
+
   return (
     <MainLayout>
-      <Container size="xl">
+      <Container size="xl" className="p-0">
         <div className="hero-inner">
           <div className="hero-content">
-            <Title className="hero-title">
-              A <span className="hero-highlight">modern</span> React <br />{" "}
-              components library
+            <Title className="hero-title">Split Expenses with Friends,</Title>
+            <Title className="hero-title" c="dimmed">
+              Hassle-Free
             </Title>
-            <Text c="dimmed" mt="md">
-              Build fully functional accessible web applications faster than
-              ever – Mantine includes more than 120 customizable components and
-              hooks to cover you in any situation
+            <Text mt="md">
+              Striply makes it easy to share expenses with friends and family.
+              Track group expenses, split bills, and settle up without the math.
             </Text>
-
-            <List
-              mt={30}
-              spacing="sm"
-              size="sm"
-              icon={
-                <ThemeIcon size={20} radius="xl">
-                  <IconCheck size={12} stroke={1.5} />
-                </ThemeIcon>
-              }
-            >
-              <List.Item>
-                <b>TypeScript based</b> – build type safe applications, all
-                components and hooks export types
-              </List.Item>
-              <List.Item>
-                <b>Free and open source</b> – all packages have MIT license, you
-                can use Mantine in any project
-              </List.Item>
-              <List.Item>
-                <b>No annoying focus ring</b> – focus ring will appear only when
-                user navigates with keyboard
-              </List.Item>
-            </List>
 
             <Group mt={30}>
               <Button radius="xl" size="md" className="hero-control">
-                Get started
-              </Button>
-              <Button
-                variant="default"
-                radius="xl"
-                size="md"
-                className="hero-control"
-              >
-                Source code
+                Get started - It's Free
               </Button>
             </Group>
           </div>
           <Image src={image} className="hero-image" />
         </div>
+      </Container>
+
+      {/* feature section */}
+
+      <Container className="wrapper p-0" size="xl">
+        <Title className="title">Features</Title>
+
+        <SimpleGrid
+          mt={60}
+          cols={{ base: 1, sm: 2, md: 4 }}
+          spacing={{ base: "xl", md: 100 }}
+          verticalSpacing={{ base: "xl", md: 100 }}
+          className="text-center"
+        >
+          {features}
+        </SimpleGrid>
       </Container>
     </MainLayout>
   );
