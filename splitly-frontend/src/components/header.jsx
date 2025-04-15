@@ -1,33 +1,13 @@
 import React from "react";
 import { IconChevronDown } from "@tabler/icons-react";
-import { Burger, Center, Container, Group, Menu } from "@mantine/core";
+import { Burger, Center, Container, Group, Menu, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { Link } from "react-router-dom"; // 👈 Import Link
 import "../styles/components/header.css";
 
-// Example navigation links
 const links = [
-  { link: "/about", label: "Features" },
-  {
-    link: "#1",
-    label: "Learn",
-    links: [
-      { link: "/docs", label: "Documentation" },
-      { link: "/resources", label: "Resources" },
-      { link: "/community", label: "Community" },
-      { link: "/blog", label: "Blog" },
-    ],
-  },
-  { link: "/about", label: "About" },
-  { link: "/pricing", label: "Pricing" },
-  {
-    link: "#2",
-    label: "Support",
-    links: [
-      { link: "/faq", label: "FAQ" },
-      { link: "/demo", label: "Book a demo" },
-      { link: "/forums", label: "Forums" },
-    ],
-  },
+  { link: "/login", label: "Login/Signup" },
+  // Add more if needed
 ];
 
 export default function Header() {
@@ -47,16 +27,12 @@ export default function Header() {
           withinPortal
         >
           <Menu.Target>
-            <a
-              href={link.link}
-              className="link"
-              onClick={(event) => event.preventDefault()}
-            >
+            <Link to={link.link} className="link">
               <Center>
                 <span className="linkLabel">{link.label}</span>
                 <IconChevronDown size={14} stroke={1.5} />
               </Center>
-            </a>
+            </Link>
           </Menu.Target>
           <Menu.Dropdown>{menuItems}</Menu.Dropdown>
         </Menu>
@@ -64,14 +40,9 @@ export default function Header() {
     }
 
     return (
-      <a
-        key={link.label}
-        href={link.link}
-        className="link"
-        onClick={(event) => event.preventDefault()}
-      >
+      <Link key={link.label} to={link.link} className="link">
         {link.label}
-      </a>
+      </Link>
     );
   });
 
@@ -79,7 +50,7 @@ export default function Header() {
     <header className="header">
       <Container size="xl">
         <div className="inner">
-          <h1>Splitly</h1>
+          <Title c="violet.9">Splitly</Title>
           <Group gap={5} visibleFrom="sm">
             {items}
           </Group>

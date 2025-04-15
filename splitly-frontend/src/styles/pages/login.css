@@ -1,0 +1,16 @@
+.custom-login {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-login .paper-login {
+  width: 50%;
+}
+
+@media screen and (max-width: 650px) {
+  .custom-login .paper-login {
+    width: 95%;
+  }
+}

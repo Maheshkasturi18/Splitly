@@ -16,6 +16,7 @@ import {
 import image from "../assets/hero-img.jpg";
 import MainLayout from "../layouts/mainLayout";
 import "../styles/pages/home.css";
+import { Link } from "react-router-dom";
 
 export const MOCKDATA = [
   {
@@ -44,7 +45,7 @@ export const MOCKDATA = [
 function Feature({ icon: Icon, title, description }) {
   return (
     <div>
-      <ThemeIcon variant="light" size={40} radius={40}>
+      <ThemeIcon variant="light" size={40} radius={40} c="violet.9">
         <Icon size={38} stroke={1.5} />
       </ThemeIcon>
       <Text mt="sm" mb={7} fw={500} size="xl">
@@ -66,7 +67,7 @@ export default function Home() {
         <div className="hero-inner">
           <div className="hero-content">
             <Title className="hero-title">Split Expenses with Friends,</Title>
-            <Title className="hero-title" c="dimmed">
+            <Title className="hero-title" c="violet.9">
               Hassle-Free
             </Title>
             <Text mt="md">
@@ -75,9 +76,16 @@ export default function Home() {
             </Text>
 
             <Group mt={30}>
-              <Button radius="xl" size="md" className="hero-control">
-                Get started - It's Free
-              </Button>
+              <Link to="/login">
+                <Button
+                  radius="xl"
+                  size="md"
+                  bg="violet.5"
+                  className="hero-control"
+                >
+                  Get started - It's Free
+                </Button>
+              </Link>
             </Group>
           </div>
           <Image src={image} className="hero-image" />
