@@ -1,0 +1,22 @@
+.footer {
+  background-color: var(--mantine-color-body);
+  border-top: 1px solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.footer-logo{
+    color: #868E96 !important;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media screen and (max-width: 500px) {
+  .footer-inner {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

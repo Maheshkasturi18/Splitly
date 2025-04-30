@@ -50,7 +50,10 @@ export default function Header() {
     <header className="header">
       <Container size="xl">
         <div className="inner">
-          <Title c="violet.9">Splitly</Title>
+          <Title c="violet.9">
+            {" "}
+            <a href="/" className="header-logo">Splitly</a>
+          </Title>
           <Group gap={5} visibleFrom="sm">
             {items}
           </Group>

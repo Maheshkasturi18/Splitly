@@ -17,6 +17,7 @@ import image from "../assets/hero-img.jpg";
 import MainLayout from "../layouts/mainLayout";
 import "../styles/pages/home.css";
 import { Link } from "react-router-dom";
+import Contact from "../components/contact";
 
 export const MOCKDATA = [
   {
@@ -107,6 +108,13 @@ export default function Home() {
           {features}
         </SimpleGrid>
       </Container>
+
+      {/* contact section */}
+
+      <Container  size="xl" py={42} px={0}>
+        <Contact />
+      </Container>
+
     </MainLayout>
   );
 }
