@@ -1,18 +1,7 @@
-import { IconLock } from "@tabler/icons-react";
+import { FiLock } from "react-icons/fi"; // Feather lock icon
 import { FaUserGroup } from "react-icons/fa6";
 import { IoCalculator } from "react-icons/io5";
 import { CiChat1 } from "react-icons/ci";
-
-import {
-  Button,
-  Container,
-  Group,
-  Image,
-  SimpleGrid,
-  Text,
-  ThemeIcon,
-  Title,
-} from "@mantine/core";
 import image from "../assets/hero-img.jpg";
 import MainLayout from "../layouts/mainLayout";
 import "../styles/pages/home.css";
@@ -37,7 +26,7 @@ export const MOCKDATA = [
     description: "Discuss expenses and plans with built-in group chat",
   },
   {
-    icon: IconLock,
+    icon: FiLock,
     title: "Secure & Private",
     description: "Your financial data is encrypted and secure",
   },
@@ -45,76 +34,60 @@ export const MOCKDATA = [
 
 function Feature({ icon: Icon, title, description }) {
   return (
-    <div>
-      <ThemeIcon variant="light" size={40} radius={40} c="violet.9">
-        <Icon size={38} stroke={1.5} />
-      </ThemeIcon>
-      <Text mt="sm" mb={7} fw={500} size="xl">
-        {title}
-      </Text>
-      <Text lh={1.6}>{description}</Text>
+    <div className="flex flex-col items-center text-center">
+      <div className="bg-violet-100 text-violet-700 p-3 rounded-full">
+        <Icon size={32} />
+      </div>
+      <h3 className="mt-3 mb-2 text-lg font-semibold">{title}</h3>
+      <p className="text-gray-600">{description}</p>
     </div>
   );
 }
 
 export default function Home() {
-  const features = MOCKDATA.map((feature, index) => (
-    <Feature {...feature} key={index} />
-  ));
-
   return (
     <MainLayout>
-      <Container size="xl" className="p-0">
-        <div className="hero-inner">
-          <div className="hero-content">
-            <Title className="hero-title">Split Expenses with Friends,</Title>
-            <Title className="hero-title" c="violet.9">
-              Hassle-Free
-            </Title>
-            <Text mt="md">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex flex-col-reverse md:flex-row items-center gap-6 py-12">
+          <div className="md:w-1/2 text-center md:text-left">
+            <h1 className="text-4xl font-bold">Split Expenses with Friends,</h1>
+            <h1 className="text-4xl font-bold text-violet-600">Hassle-Free</h1>
+            <p className="mt-4 text-gray-700">
               Striply makes it easy to share expenses with friends and family.
               Track group expenses, split bills, and settle up without the math.
-            </Text>
-
-            <Group mt={30}>
+            </p>
+            <div className="mt-6">
               <Link to="/login">
-                <Button
-                  radius="xl"
-                  size="md"
-                  bg="violet.5"
-                  className="hero-control"
-                >
+                <button className="bg-violet-500 text-white px-6 py-2 rounded-full hover:bg-violet-600">
                   Get started - It's Free
-                </Button>
+                </button>
               </Link>
-            </Group>
+            </div>
           </div>
-          <Image src={image} className="hero-image" />
+          <div className="md:w-1/2">
+            <img
+              src={image}
+              alt="Hero"
+              className="rounded-lg shadow-lg w-full"
+            />
+          </div>
         </div>
-      </Container>
 
-      {/* feature section */}
+        {/* Features section */}
+        <section className="py-12">
+          <h2 className="text-3xl font-bold text-center mb-8">Features</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            {MOCKDATA.map((feature, index) => (
+              <Feature key={index} {...feature} />
+            ))}
+          </div>
+        </section>
 
-      <Container className="wrapper p-0" size="xl">
-        <Title className="title">Features</Title>
-
-        <SimpleGrid
-          mt={60}
-          cols={{ base: 1, sm: 2, md: 4 }}
-          spacing={{ base: "xl", md: 100 }}
-          verticalSpacing={{ base: "xl", md: 100 }}
-          className="text-center"
-        >
-          {features}
-        </SimpleGrid>
-      </Container>
-
-      {/* contact section */}
-
-      <Container  size="xl" py={42} px={0}>
-        <Contact />
-      </Container>
-
+        {/* Contact section */}
+        <section className="py-12">
+          <Contact />
+        </section>
+      </div>
     </MainLayout>
   );
 }

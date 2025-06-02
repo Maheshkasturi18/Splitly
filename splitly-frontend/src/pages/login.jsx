@@ -1,26 +1,6 @@
-import {
-  Anchor,
-  Button,
-  Checkbox,
-  Divider,
-  Group,
-  Paper,
-  PasswordInput,
-  Stack,
-  Text,
-  TextInput,
-  Container,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { upperFirst, useToggle } from "@mantine/hooks";
-// import { TwitterIcon } from "@mantinex/dev-icons";
-import "../styles/pages/login.css";
-import {
-  auth,
-  googleProvider,
-  twitterProvider,
-  signInWithPopup,
-} from "../services/firebase";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { auth, googleProvider, signInWithPopup } from "../services/firebase";
 
 function GoogleIcon(props) {
   return (
@@ -51,154 +31,150 @@ function GoogleIcon(props) {
   );
 }
 
-export default function AuthenticationForm(props) {
-  const [type, toggle] = useToggle(["login", "register"]);
-  const form = useForm({
-    initialValues: {
-      email: "",
-      name: "",
-      password: "",
-      terms: true,
-    },
-    validate: {
-      name: (val) =>
-        /^[A-Za-z\s]+$/.test(val) ? null : "Name should only contain letters",
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-      password: (val) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
-          : null,
-    },
+export default function AuthenticationForm() {
+  const [type, setType] = useState("login");
+  const [form, setForm] = useState({
+    email: "",
+    name: "",
+    password: "",
+    terms: false,
   });
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const newErrors = {};
+    if (type === "register" && !/^[A-Za-z\s]+$/.test(form.name))
+      newErrors.name = "Name should only contain letters";
+    if (!/^\S+@\S+$/.test(form.email)) newErrors.email = "Invalid email";
+    if (form.password.length <= 6)
+      newErrors.password = "Password should include at least 6 characters";
+    if (type === "register" && !form.terms)
+      newErrors.terms = "You must accept terms and conditions";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      console.log("Google user:", user);
-      // Redirect or store user info
+      console.log("Google user:", result.user);
     } catch (error) {
       console.error("Google login error:", error);
     }
   };
 
-  // const handleTwitterLogin = async () => {
-  //   try {
-  //     const result = await signInWithPopup(auth, twitterProvider);
-  //     const user = result.user;
-  //     console.log("Twitter user:", user);
-  //   } catch (error) {
-  //     console.error("Twitter login error:", error);
-  //   }
-  // };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    console.log("Form submitted:", form);
+  };
 
   return (
-    <Container size="md" className="p-0 custom-login">
-      <Paper radius="md" p="xl" withBorder {...props} className="paper-login">
-        <Text size="lg" fw={500}>
+    <div className="max-w-md mx-auto p-6">
+      <div className="bg-white shadow rounded-lg p-6">
+        <h2 className="text-lg font-medium mb-4">
           Welcome to Striply, {type} with
-        </Text>
+        </h2>
 
-        {/* Social login buttons */}
-        <Group grow mb="md" mt="md">
-          <Button
-            leftSection={<GoogleIcon />}
-            variant="default"
-            radius="xl"
+        {/* Social buttons */}
+        <div className="flex gap-2 mb-4">
+          <button
             onClick={handleGoogleLogin}
+            className="flex items-center gap-2 px-4 py-2 border rounded-full"
           >
-            Google
-          </Button>
-          {/* <Button
-            leftSection={<TwitterIcon size={16} color="#00ACEE" />}
-            variant="default"
-            radius="xl"
-            onClick={handleTwitterLogin}
-          >
-            Twitter
-          </Button> */}
-        </Group>
+            <GoogleIcon /> Google
+          </button>
+        </div>
 
-        <Divider
-          label="Or continue with email"
-          labelPosition="center"
-          my="lg"
-          size="sm"
-        />
+        <div className="flex items-center my-4">
+          <hr className="flex-grow border-t border-gray-300" />
+          <span className="mx-2 text-sm text-gray-500">
+            Or continue with email
+          </span>
+          <hr className="flex-grow border-t border-gray-300" />
+        </div>
 
-        <form onSubmit={form.onSubmit(() => {})}>
-          <Stack>
-            {type === "register" && (
-              <TextInput
-                required
-                label="Name"
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {type === "register" && (
+            <div>
+              <label className="block text-sm">Name</label>
+              <input
+                type="text"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
                 placeholder="Your name"
-                value={form.values.name}
-                onChange={(event) =>
-                  form.setFieldValue("name", event.currentTarget.value)
-                }
-                error={form.errors.name && "Name should only contain letters"}
-                radius="md"
+                className="w-full border p-2 rounded"
               />
-            )}
+              {errors.name && (
+                <p className="text-red-500 text-sm">{errors.name}</p>
+              )}
+            </div>
+          )}
 
-            <TextInput
+          <div>
+            <label className="block text-sm">Email</label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="hello@example.com"
+              className="w-full border p-2 rounded"
               required
-              label="Email"
-              placeholder="hello@mantine.dev"
-              value={form.values.email}
-              onChange={(event) =>
-                form.setFieldValue("email", event.currentTarget.value)
-              }
-              error={form.errors.email && "Invalid email"}
-              radius="md"
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm">{errors.email}</p>
+            )}
+          </div>
 
-            <PasswordInput
-              required
-              label="Password"
+          <div>
+            <label className="block text-sm">Password</label>
+            <input
+              type="password"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
               placeholder="Your password"
-              value={form.values.password}
-              onChange={(event) =>
-                form.setFieldValue("password", event.currentTarget.value)
-              }
-              error={
-                form.errors.password &&
-                "Password should include at least 6 characters"
-              }
-              radius="md"
+              className="w-full border p-2 rounded"
+              required
             />
-
-            {type === "register" && (
-              <Checkbox
-                label="I accept terms and conditions"
-                checked={form.values.terms}
-                color="violet"
-                onChange={(event) =>
-                  form.setFieldValue("terms", event.currentTarget.checked)
-                }
-              />
+            {errors.password && (
+              <p className="text-red-500 text-sm">{errors.password}</p>
             )}
-          </Stack>
+          </div>
 
-          <Group justify="space-between" mt="xl">
-            <Anchor
-              component="button"
+          {type === "register" && (
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                checked={form.terms}
+                onChange={(e) => setForm({ ...form, terms: e.target.checked })}
+                className="mr-2"
+              />
+              <label>I accept terms and conditions</label>
+              {errors.terms && (
+                <p className="text-red-500 text-sm">{errors.terms}</p>
+              )}
+            </div>
+          )}
+
+          <div className="flex justify-between items-center">
+            <button
               type="button"
-              c="violet.9"
-              onClick={() => toggle()}
-              size="sm"
+              onClick={() => setType(type === "login" ? "register" : "login")}
+              className="text-violet-600 text-sm"
             >
               {type === "register"
                 ? "Already have an account? Login"
                 : "Don't have an account? Register"}
-            </Anchor>
-            <Button type="submit" radius="xl" bg="violet.9">
-              {upperFirst(type)}
-            </Button>
-          </Group>
+            </button>
+            <button
+              type="submit"
+              className="bg-violet-600 text-white px-4 py-2 rounded-full"
+            >
+              {type.charAt(0).toUpperCase() + type.slice(1)}
+            </button>
+          </div>
         </form>
-      </Paper>
-    </Container>
+      </div>
+    </div>
   );
 }
