@@ -58,18 +58,14 @@ export default function Home() {
             </p>
             <div className="mt-6">
               <Link to="/login">
-                <button className="bg-violet-500 text-white px-6 py-2 rounded-full hover:bg-violet-600">
+                <button className="bg-violet-500 text-white px-6 py-2 rounded-full hover:bg-violet-600 cursor-pointer">
                   Get started - It's Free
                 </button>
               </Link>
             </div>
           </div>
           <div className="md:w-1/2">
-            <img
-              src={image}
-              alt="Hero"
-              className="rounded-lg shadow-lg w-full"
-            />
+            <img src={image} alt="Hero" className="rounded-lg w-full" />
           </div>
         </div>
 

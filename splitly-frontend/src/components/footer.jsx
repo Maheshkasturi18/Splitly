@@ -4,11 +4,11 @@ import "../styles/components/footer.css"; // Adjust the path as needed
 
 export default function Footer() {
   return (
-    <footer className="footer bg-gray-100 py-4">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+    <footer className="footer bg-white shadow ">
+      <div className="max-w-7xl mx-auto  flex flex-col md:flex-row justify-between items-center p-4">
         <p className="text-sm text-gray-600">
           © {new Date().getFullYear()}{" "}
-          <a href="#" className="footer-logo font-semibold text-violet-600">
+          <a href="/" className="footer-logo font-semibold text-violet-600">
             Splitly
           </a>
           . All rights reserved.

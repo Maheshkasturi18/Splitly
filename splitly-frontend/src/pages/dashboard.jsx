@@ -1,118 +1,158 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export default function Dashboard() {
-  const [groups, setGroups] = useState([
-    { id: 1, name: "Goa Trip", members: 4 },
-    { id: 2, name: "Office Lunch", members: 3 },
-  ]);
-  const [isCreateOpen, setCreateOpen] = useState(false);
-  const [isJoinOpen, setJoinOpen] = useState(false);
-  const [newGroupName, setNewGroupName] = useState("");
-  const [joinCode, setJoinCode] = useState("");
+function Dashboard() {
+  const [user, setUser] = useState(null);
+  const [groups, setGroups] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [groupName, setGroupName] = useState("");
+  const [groupDesc, setGroupDesc] = useState("");
+  const [members, setMembers] = useState([]);
+  const [memberName, setMemberName] = useState("");
+  const [memberEmail, setMemberEmail] = useState("");
 
-  const handleCreateGroup = () => {
-    if (!newGroupName) return;
-    setGroups([...groups, { id: Date.now(), name: newGroupName, members: 1 }]);
-    setNewGroupName("");
-    setCreateOpen(false);
+  useEffect(() => {
+    fetch("http://localhost:5000/api/user")
+      .then((res) => res.json())
+      .then((data) => setUser(data));
+
+    fetch("http://localhost:5000/api/groups")
+      .then((res) => res.json())
+      .then((data) => setGroups(data));
+  }, []);
+
+  const addMember = () => {
+    if (memberName && memberEmail) {
+      setMembers([...members, { name: memberName, email: memberEmail }]);
+      setMemberName("");
+      setMemberEmail("");
+    }
   };
 
-  const handleJoinGroup = () => {
-    if (!joinCode) return;
-    setGroups([
-      ...groups,
-      { id: Date.now(), name: `Joined Group ${joinCode}`, members: 1 },
-    ]);
-    setJoinCode("");
-    setJoinOpen(false);
+  const createGroup = async () => {
+    const response = await fetch("http://localhost:5000/api/groups", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: groupName,
+        description: groupDesc,
+        members: members,
+        admin: user.email,
+      }),
+    });
+    const data = await response.json();
+    alert(data.message);
+    setShowModal(false);
+    setGroupName("");
+    setGroupDesc("");
+    setMembers([]);
+    // Refresh groups
+    const groupsRes = await fetch("http://localhost:5000/api/groups");
+    const groupsData = await groupsRes.json();
+    setGroups(groupsData);
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Your Groups</h1>
-        <div className="space-x-2">
-          <button
-            className="bg-violet-600 text-white px-4 py-2 rounded hover:bg-violet-700"
-            onClick={() => setCreateOpen(true)}
-          >
-            Create Group
-          </button>
-          <button
-            className="border border-violet-600 text-violet-600 px-4 py-2 rounded hover:bg-violet-50"
-            onClick={() => setJoinOpen(true)}
-          >
-            Join Group
-          </button>
+    <div className="p-6 max-w-6xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-purple-600 text-white p-4 rounded-lg shadow">
+          <p>Total Balance</p>
+          <p className="text-3xl font-bold">
+            ₹{user?.balance?.toFixed(2) || "0.00"}
+          </p>
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow">
+          <p>Your Groups</p>
+          <p className="text-3xl font-bold">{groups.length}</p>
+        </div>
+        <div className="bg-white p-4 rounded-lg shadow">
+          <p>Profile</p>
+          <p>{user?.name || "Loading..."}</p>
+          <p>{user?.email || ""}</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="flex justify-between items-center mt-6">
+        <h2 className="text-xl font-semibold mt-6 mb-2">Your Groups</h2>
+        <button
+          onClick={() => setShowModal(true)}
+          className="mt-2 px-4 py-2 bg-purple-600 text-white rounded cursor-pointer"
+        >
+          Create Group
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {groups.map((group) => (
-          <div
-            key={group.id}
-            className="border rounded-lg p-4 hover:shadow-xl cursor-pointer"
-          >
-            <h2 className="text-xl font-semibold">{group.name}</h2>
-            <p className="text-sm text-gray-500">{group.members} members</p>
+          <div key={group._id} className="bg-white p-4 rounded shadow">
+            <p>{group.name}</p>
+            <p>{group.members.length} members</p>
+            <p>Total Expenses: ${group.totalExpenses?.toFixed(2)}</p>
           </div>
         ))}
       </div>
 
-      {/* Create Group Modal */}
-      {isCreateOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg w-full max-w-md p-6">
-            <h2 className="text-lg font-bold mb-4">Create New Group</h2>
+      {showModal && (
+        <div className="fixed inset-0 bg-black/75 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg w-96 shadow-2xl">
+            <h2 className="text-lg font-bold mb-2">Create a New Group</h2>
             <input
-              type="text"
-              placeholder="Enter group name"
-              value={newGroupName}
-              onChange={(e) => setNewGroupName(e.target.value)}
-              className="w-full border p-2 rounded mb-4"
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+              placeholder="Group Name"
+              className="w-full p-2 border rounded mb-2"
             />
-            <div className="flex justify-end space-x-2">
-              <button
-                className="px-4 py-2 bg-gray-200 rounded"
-                onClick={() => setCreateOpen(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-700"
-                onClick={handleCreateGroup}
-              >
-                Create
-              </button>
+            <textarea
+              value={groupDesc}
+              onChange={(e) => setGroupDesc(e.target.value)}
+              placeholder="Description"
+              className="w-full p-2 border rounded mb-2"
+            />
+            <div className="bg-purple-100 p-2 rounded mb-2 text-sm">
+              You'll be automatically added as admin.
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Join Group Modal */}
-      {isJoinOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg w-full max-w-md p-6">
-            <h2 className="text-lg font-bold mb-4">Join Group</h2>
             <input
-              type="text"
-              placeholder="Enter group code"
-              value={joinCode}
-              onChange={(e) => setJoinCode(e.target.value)}
-              className="w-full border p-2 rounded mb-4"
+              value={memberName}
+              onChange={(e) => setMemberName(e.target.value)}
+              placeholder="Member Name"
+              className="w-full p-2 border rounded mb-2"
             />
-            <div className="flex justify-end space-x-2">
+            <input
+              value={memberEmail}
+              onChange={(e) => setMemberEmail(e.target.value)}
+              placeholder="Member Email"
+              className="w-full p-2 border rounded mb-2"
+            />
+            <button
+              onClick={addMember}
+              className="px-4 py-1 border border-purple-600 text-purple-600 rounded mb-2 cursor-pointer"
+            >
+              Add Member
+            </button>
+            <div>
+              {members.map((m, i) => (
+                <div
+                  key={i}
+                  className="flex justify-between items-center bg-gray-100 p-1 rounded my-1"
+                >
+                  <span>
+                    {m.name} ({m.email})
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between mt-4">
               <button
-                className="px-4 py-2 bg-gray-200 rounded"
-                onClick={() => setJoinOpen(false)}
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 border rounded cursor-pointer"
               >
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-700"
-                onClick={handleJoinGroup}
+                onClick={createGroup}
+                className="px-4 py-2 bg-purple-600 text-white rounded cursor-pointer"
               >
-                Join
+                Create Group
               </button>
             </div>
           </div>
@@ -121,3 +161,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+export default Dashboard;

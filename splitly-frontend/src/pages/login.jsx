@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import "../styles/pages/login.css";
 import { auth, googleProvider, signInWithPopup } from "../services/firebase";
 
 function GoogleIcon(props) {
@@ -70,8 +71,8 @@ export default function AuthenticationForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6">
-      <div className="bg-white shadow rounded-lg p-6">
+    <div className="mx-auto p-6 custom-login">
+      <div className="w-md bg-white shadow rounded-lg p-6">
         <h2 className="text-lg font-medium mb-4">
           Welcome to Striply, {type} with
         </h2>
@@ -80,7 +81,7 @@ export default function AuthenticationForm() {
         <div className="flex gap-2 mb-4">
           <button
             onClick={handleGoogleLogin}
-            className="flex items-center gap-2 px-4 py-2 border rounded-full"
+            className="flex items-center justify-center gap-4 px-4 py-2 border rounded-full w-screen cursor-pointer"
           >
             <GoogleIcon /> Google
           </button>
@@ -147,7 +148,7 @@ export default function AuthenticationForm() {
                 type="checkbox"
                 checked={form.terms}
                 onChange={(e) => setForm({ ...form, terms: e.target.checked })}
-                className="mr-2"
+                className="mr-2 cursor-pointer"
               />
               <label>I accept terms and conditions</label>
               {errors.terms && (
@@ -160,7 +161,7 @@ export default function AuthenticationForm() {
             <button
               type="button"
               onClick={() => setType(type === "login" ? "register" : "login")}
-              className="text-violet-600 text-sm"
+              className="text-violet-600 text-sm cursor-pointer"
             >
               {type === "register"
                 ? "Already have an account? Login"
@@ -168,7 +169,7 @@ export default function AuthenticationForm() {
             </button>
             <button
               type="submit"
-              className="bg-violet-600 text-white px-4 py-2 rounded-full"
+              className="bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-full cursor-pointer"
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
             </button>

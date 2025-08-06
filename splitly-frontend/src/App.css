@@ -7,10 +7,14 @@ body {
   font-family: "Josefin Sans", sans-serif !important;
 }
 
-.m_8a5d1357  {
+.m_8a5d1357 {
   font-family: "Josefin Sans", sans-serif !important;
 }
 
-
+.layout-container {
+  display: flex;
+  flex-direction: column; /* Stack children vertically (Header, Main, Footer) */
+  min-height: 100vh; /* Make the container at least the full height of the viewport */
+}
 
 /*purple - #4929a3 */

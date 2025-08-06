@@ -1,4 +1,4 @@
-/* .custom-login {
+.custom-login {
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -13,4 +13,10 @@
   .custom-login .paper-login {
     width: 95%;
   }
+}
+/* body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 } */

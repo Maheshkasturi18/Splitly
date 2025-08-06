@@ -17,7 +17,7 @@ export default function Header() {
     <header className="header bg-white shadow">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <h1 className="text-violet-700 text-xl font-bold">
-          <a href="#" className="header-logo">
+          <a href="/" className="header-logo">
             Splitly
           </a>
         </h1>
