@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginForm from "./pages/login";
 import RegisterForm from "./pages/register";
 import Dashboard from "./pages/dashboard";
+import NotFound from "./pages/notFound";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
