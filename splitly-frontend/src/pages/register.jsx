@@ -1,9 +1,9 @@
 import { useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import "../styles/pages/login.css";
-import axios from "axios";
-import { useNavigate } from "react-router";
 import { auth, googleProvider, signInWithPopup } from "../services/firebase";
+import { useNavigate } from "react-router";
 
 function GoogleIcon(props) {
   return (
@@ -34,20 +34,25 @@ function GoogleIcon(props) {
   );
 }
 
-export default function LoginForm() {
-  const [type, setType] = useState("login");
+export default function RegisterForm() {
+  const [type, setType] = useState("register");
   const [form, setForm] = useState({
     email: "",
+    name: "",
     password: "",
+    // terms: false,
   });
   const [errors, setErrors] = useState({});
   let navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
+    if (!/^[A-Za-z\s]+$/.test(form.name))
+      newErrors.name = "Name should only contain letters";
     if (!/^\S+@\S+$/.test(form.email)) newErrors.email = "Invalid email";
     if (form.password.length <= 6)
       newErrors.password = "Password should include at least 6 characters";
+    // if (!form.terms) newErrors.terms = "You must accept terms and conditions";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -69,7 +74,7 @@ export default function LoginForm() {
         }
       );
 
-      alert("Google login success");
+      alert("Login successfull");
       navigate("/dashboard");
     } catch (error) {
       console.error("Google login error:", error);
@@ -82,16 +87,18 @@ export default function LoginForm() {
     if (!validate()) return;
 
     try {
-      const response = await axios.post("http://localhost:5000/login", form, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/register",
+        form,
+        { withCredentials: true }
+      );
+
       console.log(response.data);
-      alert("Login successful");
-      navigate("/dashboard");
-      console.log("Form submitted:", form);
+      alert("Registeration successful");
+      navigate("/login");
     } catch (error) {
       console.log(error);
-      alert("User Not found!");
+      alert("Failed to register user!");
     }
   };
 
@@ -122,6 +129,20 @@ export default function LoginForm() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
+            <label className="block text-sm">Name</label>
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+              placeholder="Your name"
+              className="w-full border p-2 rounded"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm">{errors.name}</p>
+            )}
+          </div>
+
+          <div>
             <label className="block text-sm">Email</label>
             <input
               type="email"
@@ -151,14 +172,27 @@ export default function LoginForm() {
             )}
           </div>
 
+          {/* <div className="flex items-center">
+            <input
+              type="checkbox"
+              checked={form.terms}
+              onChange={(e) => setForm({ ...form, terms: e.target.checked })}
+              className="mr-2 cursor-pointer"
+            />
+            <label>I accept terms and conditions</label>
+            {errors.terms && (
+              <p className="text-red-500 text-sm">{errors.terms}</p>
+            )}
+          </div> */}
+
           <div className="flex justify-between items-center">
             <Link
-              to="/register"
+              to="/login"
               type="button"
-              onClick={() => setType("login")}
+              onClick={() => setType("register")}
               className="text-violet-600 text-sm cursor-pointer"
             >
-              Don't have an account? Register
+              Already have an account? Login
             </Link>
             <button
               type="submit"

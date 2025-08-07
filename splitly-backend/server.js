@@ -3,14 +3,30 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const express = require('express');
 const authRoutes = require("./routes/authRoute")
-
+const dashoardRoutes = require("./routes/dashboardRoute")
+const { restrictToLoginUser } = require("./middlewares/authMiddleware")
+const cookieParser = require('cookie-parser');
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // <-- The origin of your frontend app
+    credentials: true, // <-- This is crucial for cookies
+}));
+app.use(cookieParser());
 app.use(express.json());
+// server.js or app.js
+
+app.use((req, res, next) => {
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+    res.setHeader("Cross-Origin-Embedder-Policy", "same-origin-allow-popups");
+    next();
+});
+
 
 app.use("/", authRoutes)
+
+app.use("/dashboard", restrictToLoginUser, dashoardRoutes)
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,

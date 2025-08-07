@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import axios from "axios";
+import { getAuth, signOut } from "firebase/auth";
 
 function Dashboard() {
   const [user, setUser] = useState(null);
@@ -9,13 +12,17 @@ function Dashboard() {
   const [members, setMembers] = useState([]);
   const [memberName, setMemberName] = useState("");
   const [memberEmail, setMemberEmail] = useState("");
+  const [loading, setLoading] = useState(true);
+  let navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/user")
+    axios
+      .get("http://localhost:5000/user")
       .then((res) => res.json())
       .then((data) => setUser(data));
 
-    fetch("http://localhost:5000/api/groups")
+    axios
+      .get("http://localhost:5000/groups")
       .then((res) => res.json())
       .then((data) => setGroups(data));
   }, []);
@@ -29,9 +36,7 @@ function Dashboard() {
   };
 
   const createGroup = async () => {
-    const response = await fetch("http://localhost:5000/api/groups", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    const response = axios.post("http://localhost:5000/groups", {
       body: JSON.stringify({
         name: groupName,
         description: groupDesc,
@@ -46,14 +51,62 @@ function Dashboard() {
     setGroupDesc("");
     setMembers([]);
     // Refresh groups
-    const groupsRes = await fetch("http://localhost:5000/api/groups");
+    const groupsRes = await axios.get("http://localhost:5000/groups");
     const groupsData = await groupsRes.json();
     setGroups(groupsData);
   };
 
+  const logout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:5000/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
+      alert("logout successfull");
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/dashboard", {
+          withCredentials: true,
+        });
+        setUser(res.data.user);
+
+        console.log("res.data.user", res.data.user);
+      } catch (error) {
+        console.error("Auth check failed", error);
+        navigate("/login");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+
+        <button
+          className="logout cursor-pointer border border-1 p-2 rounded-md"
+          onClick={logout}
+        >
+          Logout
+        </button>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-purple-600 text-white p-4 rounded-lg shadow">
           <p>Total Balance</p>
@@ -67,7 +120,7 @@ function Dashboard() {
         </div>
         <div className="bg-white p-4 rounded-lg shadow">
           <p>Profile</p>
-          <p>{user?.name || "Loading..."}</p>
+          <p>{user?.name || ""}</p>
           <p>{user?.email || ""}</p>
         </div>
       </div>
@@ -96,6 +149,13 @@ function Dashboard() {
         <div className="fixed inset-0 bg-black/75 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg w-96 shadow-2xl">
             <h2 className="text-lg font-bold mb-2">Create a New Group</h2>
+
+            <button
+              className="cursor-pointer"
+              onClick={() => setShowModal(false)}
+            >
+              close
+            </button>
             <input
               value={groupName}
               onChange={(e) => setGroupName(e.target.value)}
