@@ -103,10 +103,10 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="mx-auto p-6 custom-login">
-      <div className="w-md bg-white shadow rounded-lg p-6">
-        <h2 className="text-lg font-medium mb-4">
-          Welcome to Striply, {type} with
+    <div className="mx-auto p-4 md:p-6 custom-login">
+      <div className="w-full md:w-md bg-white shadow rounded-lg p-6">
+        <h2 className="text-md md:text-lg font-medium mb-4">
+          Welcome to Splitly, {type} with
         </h2>
 
         {/* Social buttons */}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { IoChevronDown, IoMenu, IoClose } from "react-icons/io5";
+import { RiExchangeDollarFill } from "react-icons/ri";
 import "../styles/components/header.css";
 
 const links = [
@@ -9,20 +10,21 @@ const links = [
 ];
 
 export default function Header() {
-  const [opened, setOpened] = useState(false);
+  // const [opened, setOpened] = useState(false);
 
-  const toggle = () => setOpened(!opened);
+  // const toggle = () => setOpened(!opened);
 
   return (
     <header className="header bg-white shadow">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-        <h1 className="text-violet-700 text-xl font-bold">
-          <a href="/" className="header-logo">
+        <h1 className="text-violet-700 text-xl md:text-2xl font-bold">
+          <a href="/" className="flex items-center gap-2">
+            <RiExchangeDollarFill className="text-3xl md:text-4xl"/>
             Splitly
           </a>
         </h1>
 
-        <nav className="hidden sm:flex gap-4">
+        <nav className=" sm:flex gap-4">
           {links.map((link) => (
             <Link
               key={link.label}
@@ -34,7 +36,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <button
+        {/* <button
           onClick={toggle}
           className="sm:hidden text-gray-700 focus:outline-none"
         >
@@ -43,11 +45,11 @@ export default function Header() {
           ) : (
             <IoMenu className="h-6 w-6" />
           )}
-        </button>
+        </button> */}
       </div>
 
       {/* Mobile menu */}
-      {opened && (
+      {/* {opened && (
         <div className="sm:hidden bg-white shadow-md">
           <nav className="flex flex-col p-4 space-y-2">
             {links.map((link) => (
@@ -62,7 +64,7 @@ export default function Header() {
             ))}
           </nav>
         </div>
-      )}
+      )} */}
     </header>
   );
 }
