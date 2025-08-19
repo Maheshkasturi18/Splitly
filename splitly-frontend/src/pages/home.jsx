@@ -1,7 +1,9 @@
+import React, { useState } from "react";
 import { FiLock } from "react-icons/fi"; // Feather lock icon
 import { FaUserGroup } from "react-icons/fa6";
 import { IoCalculator } from "react-icons/io5";
 import { CiChat1 } from "react-icons/ci";
+import { IoIosArrowDown } from "react-icons/io";
 import image from "../assets/hero-img.jpg";
 import MainLayout from "../layouts/mainLayout";
 import "../styles/pages/home.css";
@@ -63,7 +65,36 @@ function Feature({
   );
 }
 
+export const faqdetails = [
+  {
+    title: "Is Splitly really free?",
+    description:
+      "Yes! Splitly is completely free and open-source. There are no hidden fees, premium features, or subscription costs.",
+  },
+  {
+    title: "How secure is my financial data?",
+    description:
+      "We use bank-level encryption to protect your data. All information is securely stored and never shared with third parties.",
+  },
+  {
+    title: "Can I use Splitly offline?",
+    description:
+      "Yes! You can add expenses offline, and they'll sync automatically when you're back online.",
+  },
+  {
+    title: "How do I settle debts with friends?",
+    description:
+      "Splitly shows you exactly who owes what. You can settle through various payment methods or mark debts as paid manually.",
+  },
+];
+
 export default function Home() {
+  const [openFaq, setOpenFaq] = useState(null);
+
+  const handleFaqDropdown = (index) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
+
   return (
     <MainLayout>
       <div>
@@ -99,7 +130,8 @@ export default function Home() {
               Simplify your shared expenses
             </h2>
             <h5 className="text-base lg:text-xl text-gray-700 text-center w-full md:w-[75%] inline-block">
-              Powerful features designed to make expense sharing simple, fair, and stress-free.
+              Powerful features designed to make expense sharing simple, fair,
+              and stress-free.
             </h5>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -112,7 +144,9 @@ export default function Home() {
         {/* Call-to-action(CTA) */}
         <section className="px-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-12">
           <div className="text-center">
-            <h1 className="text-xl md:text-3xl font-bold mb-6">Ready to Split Smarter?</h1>
+            <h1 className="text-xl md:text-3xl font-bold mb-6">
+              Ready to Split Smarter?
+            </h1>
             <p className="text-base lg:text-xl w-full md:w-[70%] mx-auto">
               Join thousands of users who've simplified their shared expenses
               with Splitly. Start splitting smarter today - it's completely
@@ -124,6 +158,44 @@ export default function Home() {
                   Get started - It's Free
                 </button>
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* faq section */}
+        <section className="px-4 py-12">
+          <div className="text-center">
+            <h1 className="text-xl md:text-3xl font-bold mb-4">
+              Frequently Asked Questions
+            </h1>
+            <p className="text-base lg:text-xl mx-auto">
+              Everything you need to know about Splitly
+            </p>
+            <div className="container w-[100%] md:w-[600px] mx-auto text-start mt-10">
+              {faqdetails.map((faq, index) => (
+                <div
+                  className="mt-6 bg-gray-100 px-6 py-4 rounded-lg"
+                  key={index}
+                >
+                  <div
+                    className="flex items-center justify-between"
+                    onClick={() => handleFaqDropdown(index)}
+                  >
+                    <h2 className="text-base  md:text-lg font-semibold ">{faq.title}</h2>
+                    <IoIosArrowDown
+                      className={`font-bold cursor-pointer transition ease-in-out duration-300 ${
+                        openFaq === index ? "rotate-180" : ""
+                      }`}
+                      size={20}
+                    />
+                  </div>
+                  {openFaq === index && (
+                    <div className="mt-4" id="faq-content">
+                      <p className="text-gray-600 ">{faq.description}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </section>
