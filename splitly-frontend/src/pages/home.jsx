@@ -66,8 +66,8 @@ function Feature({
 export default function Home() {
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto md:px-4">
-        <div className="flex flex-col-reverse md:flex-row items-center gap-3 md:gap-6 py-6 md:py-12">
+      <div>
+        <div className="max-w-7xl px-4  mx-auto flex flex-col-reverse md:flex-row items-center gap-3 md:gap-6 py-6 md:py-12">
           <div className="md:w-1/2 text-center md:text-left">
             <h1 className="text-2xl md:text-4xl font-bold">
               Split Expenses with Friends,
@@ -93,20 +93,38 @@ export default function Home() {
         </div>
 
         {/* Features section */}
-        <section className="py-6 md:py-12">
-          <div className="mb-10 text-center">
+        <section className="py-8 md:py-12 max-w-7xl px-4  mx-auto">
+          <div className="mb-6 md:mb-10 text-center">
             <h2 className="text-xl md:text-3xl font-bold text-center mb-4">
               Simplify your shared expenses
             </h2>
             <h5 className="text-base lg:text-xl text-gray-700 text-center w-full md:w-[75%] inline-block">
-              Splitly makes it easy to share expenses with friends and family,
-              so you can focus on the fun things in life.
+              Powerful features designed to make expense sharing simple, fair, and stress-free.
             </h5>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {MOCKDATA.map((feature, index) => (
               <Feature key={index} {...feature} />
             ))}
+          </div>
+        </section>
+
+        {/* Call-to-action(CTA) */}
+        <section className="px-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-12">
+          <div className="text-center">
+            <h1 className="text-xl md:text-3xl font-bold mb-6">Ready to Split Smarter?</h1>
+            <p className="text-base lg:text-xl w-full md:w-[70%] mx-auto">
+              Join thousands of users who've simplified their shared expenses
+              with Splitly. Start splitting smarter today - it's completely
+              free!
+            </p>
+            <div className="mt-8">
+              <Link to="/login">
+                <button className="bg-white text-violet-600 transition duration-300 ease-in-out hover:-translate-y-1  px-6 py-2 rounded-full cursor-pointer">
+                  Get started - It's Free
+                </button>
+              </Link>
+            </div>
           </div>
         </section>
 
