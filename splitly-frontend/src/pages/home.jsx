@@ -65,6 +65,39 @@ function Feature({
   );
 }
 
+export const splitlyworking = [
+  {
+    number: 1,
+    title: "Create a Group",
+    description:
+      "Start by creating a group and inviting your friends, roommates, or travel companions.",
+  },
+  {
+    number: 2,
+    title: "Add Expenses",
+    description:
+      "Quickly add expenses by taking photos of receipts or manually entering amounts.",
+  },
+  {
+    number: 3,
+    title: "Settle Up",
+    description:
+      "Splitly calculates who owes whom, making settlements quick and easy.",
+  },
+];
+
+function Working({ number, title, description }) {
+  return (
+    <div className="flex flex-col items-center justify-center text-center p-0 md:p-6 rounded-xl">
+      <div className="px-8 py-6 rounded-full bg-violet-500 text-xl mb-4 font-bold text-white">
+        {number}
+      </div>
+      <h3 className="mt-3 mb-2 text-lg font-semibold">{title}</h3>
+      <p className="text-gray-600">{description}</p>
+    </div>
+  );
+}
+
 export const faqdetails = [
   {
     title: "Is Splitly really free?",
@@ -141,9 +174,26 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="py-8 md:py-12 max-w-7xl px-4  mx-auto">
+          <div className="mb-8 text-center">
+            <h2 className="text-xl md:text-3xl font-bold text-center mb-4">
+              How Splitly Works
+            </h2>
+            <h5 className="text-base lg:text-xl text-gray-700 text-center w-full md:w-[75%] inline-block">
+              Get started in three simple steps and never worry about splitting
+              expenses again.
+            </h5>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {splitlyworking.map((working, index) => (
+              <Working key={index} {...working} />
+            ))}
+          </div>
+        </section>
+
         {/* Call-to-action(CTA) */}
         <section className="px-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white py-12">
-          <div className="text-center">
+          <div className="text-center max-w-7xl mx-auto">
             <h1 className="text-xl md:text-3xl font-bold mb-6">
               Ready to Split Smarter?
             </h1>
@@ -181,7 +231,9 @@ export default function Home() {
                     className="flex items-center justify-between"
                     onClick={() => handleFaqDropdown(index)}
                   >
-                    <h2 className="text-base  md:text-lg font-semibold ">{faq.title}</h2>
+                    <h2 className="text-base  md:text-lg font-semibold ">
+                      {faq.title}
+                    </h2>
                     <IoIosArrowDown
                       className={`font-bold cursor-pointer transition ease-in-out duration-300 ${
                         openFaq === index ? "rotate-180" : ""
